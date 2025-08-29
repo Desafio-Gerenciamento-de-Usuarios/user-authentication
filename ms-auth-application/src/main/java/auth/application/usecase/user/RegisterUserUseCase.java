@@ -1,23 +1,30 @@
 package auth.application.usecase.user;
 
+import auth.application.facades.MessageFacade;
+import auth.application.messages.UserCreatedMessage;
 import auth.application.usecase.UseCase;
 import auth.application.usecase.user.input.RegisterInput;
 import auth.application.usecase.user.output.RegisterOutput;
 import auth.domain.exception.ConflictException;
 import auth.domain.gateway.UserGateway;
+import auth.domain.model.Address;
 import auth.domain.model.User;
 import auth.domain.service.PasswordEncoderService;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class RegisterUserUseCase extends UseCase<RegisterInput, RegisterOutput> {
 
     private final UserGateway userGateway;
     private final PasswordEncoderService passwordEncoder;
+    private final MessageFacade messageFacade;
 
-    public RegisterUserUseCase(UserGateway userGateway, PasswordEncoderService passwordEncoder) {
+    public RegisterUserUseCase(UserGateway userGateway, PasswordEncoderService passwordEncoder, MessageFacade messageFacade) {
         this.userGateway = userGateway;
         this.passwordEncoder = passwordEncoder;
+        this.messageFacade = messageFacade;
     }
 
 
@@ -29,6 +36,17 @@ public class RegisterUserUseCase extends UseCase<RegisterInput, RegisterOutput> 
 
         final String passwordEncoded = encoder(input.password());
 
+        final List<Address> addresses = input.addresses()
+                .stream()
+                .map(addressInput -> Address.create(
+                        addressInput.road(),
+                        addressInput.number(),
+                        addressInput.city(),
+                        addressInput.state(),
+                        addressInput.zipCode()
+                ))
+                .toList();
+
         final User domain = User.create(
                 input.username(),
                 passwordEncoded,
@@ -37,6 +55,8 @@ public class RegisterUserUseCase extends UseCase<RegisterInput, RegisterOutput> 
         );
 
         final User user = userGateway.save(domain);
+
+        messageFacade.sendMessage(toMessage(user, input, addresses));
 
         return new RegisterOutput(
                 user.getId(),
@@ -59,6 +79,19 @@ public class RegisterUserUseCase extends UseCase<RegisterInput, RegisterOutput> 
         if (userGateway.existsByEmail(email)) {
             throw new ConflictException("Email already exists");
         }
+    }
+
+    private UserCreatedMessage toMessage(User user, RegisterInput input, List<Address> addresses) {
+        return new UserCreatedMessage(
+                user.getId().toString(),
+                input.document(),
+                user.getEmail(),
+                user.getName(),
+                input.phone(),
+                addresses.stream()
+                        .map(UserCreatedMessage.Address::from)
+                        .toList()
+        );
     }
 
     @Override
