@@ -1,10 +1,9 @@
 package auth.infrastructure.gateway;
 
-import auth.domain.exception.AccessDeniedException;
 import auth.domain.gateway.UserGateway;
 import auth.domain.model.User;
 import auth.infrastructure.entity.UserEntity;
-import auth.infrastructure.repository.JpaUserRepository;
+import auth.infrastructure.gateway.repository.JpaUserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;

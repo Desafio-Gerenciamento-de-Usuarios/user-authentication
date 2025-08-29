@@ -1,4 +1,4 @@
-package auth.infrastructure.repository;
+package auth.infrastructure.gateway.repository;
 
 import auth.domain.model.User;
 import auth.infrastructure.entity.UserEntity;

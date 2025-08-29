@@ -2,6 +2,7 @@ package auth.web.controller;
 
 import auth.application.usecase.user.LoginUserUseCase;
 import auth.application.usecase.user.RegisterUserUseCase;
+import auth.application.usecase.user.input.AddressInput;
 import auth.application.usecase.user.input.LoginInput;
 import auth.application.usecase.user.input.RegisterInput;
 import auth.application.usecase.user.output.AuthOutput;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/auth")
@@ -54,12 +56,27 @@ public class AuthController {
             @RequestBody RegisterRequest request,
             HttpServletRequest servletRequest
     ) {
+
+        final List<AddressInput> addressInput = request.addresses().stream()
+                .map(address -> AddressInput.builder()
+                        .road(address.road())
+                        .number(address.number())
+                        .city(address.city())
+                        .state(address.state())
+                        .zipCode(address.zipCode())
+                        .build())
+                .toList();
+
         final RegisterInput input = RegisterInput
                 .builder()
                 .username(request.username())
                 .password(request.password())
                 .name(request.name())
                 .email(request.email())
+                .document(request.document())
+                .dateOfBirth(request.dateOfBirth())
+                .phone(request.phone())
+                .addresses(addressInput)
                 .build();
 
         final RegisterOutput output = registerUserUseCase.execute(input);
