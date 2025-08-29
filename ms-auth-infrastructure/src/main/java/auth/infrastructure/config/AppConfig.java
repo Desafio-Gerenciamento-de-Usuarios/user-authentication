@@ -1,6 +1,7 @@
 package auth.infrastructure.config;
 
 
+import auth.application.facades.MessageFacade;
 import auth.application.usecase.token.RefreshTokenUseCase;
 import auth.application.usecase.user.LoginUserUseCase;
 import auth.application.usecase.user.RegisterUserUseCase;
@@ -14,8 +15,8 @@ import org.springframework.context.annotation.Configuration;
 public class AppConfig {
 
     @Bean
-    public RegisterUserUseCase registerUserUseCase(UserGateway userGateway, PasswordEncoderService passwordEncoder) {
-        return new RegisterUserUseCase(userGateway, passwordEncoder);
+    public RegisterUserUseCase registerUserUseCase(UserGateway userGateway, PasswordEncoderService passwordEncoder, MessageFacade messageFacade) {
+        return new RegisterUserUseCase(userGateway, passwordEncoder, messageFacade);
     }
 
     @Bean

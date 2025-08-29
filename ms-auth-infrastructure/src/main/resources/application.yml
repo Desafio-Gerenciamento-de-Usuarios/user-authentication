@@ -10,7 +10,24 @@ spring:
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
+  rabbitmq:
+    publisher-returns: true
+    publisher-confirm-type: correlated
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    connection-timeout: 5000
+    template:
+      retry:
+        enabled: false
+
+amqp:
+  queue:
+    user-created: user-created.queue
+  dlq:
+    user-created-dlq: user-created.dlq
 
 server:
   servlet:

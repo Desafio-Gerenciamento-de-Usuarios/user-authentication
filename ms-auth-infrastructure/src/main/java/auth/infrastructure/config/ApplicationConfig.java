@@ -12,6 +12,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
         "auth.infrastructure"
 })
 @EntityScan("auth.infrastructure.entity")
-@EnableJpaRepositories("auth.infrastructure.repository")
+@EnableJpaRepositories("auth.infrastructure.gateway.repository")
 public class ApplicationConfig {
 }
