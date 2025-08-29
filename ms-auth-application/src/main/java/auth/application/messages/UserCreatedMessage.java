@@ -9,6 +9,7 @@ public record UserCreatedMessage(
         String email,
         String name,
         String phone,
+        String createdAt,
         List<UserCreatedMessage.Address> addresses
 ) implements Serializable {
     public record Address(

@@ -1,9 +1,7 @@
 package auth.domain.model;
 
-import java.util.Collections;
-import java.util.HashSet;
+import java.time.LocalDateTime;
 import java.util.Objects;
-import java.util.Set;
 import java.util.UUID;
 
 public class User {
@@ -13,14 +11,16 @@ public class User {
     private String name;
     private String email;
     private String passwordHash;
+    private LocalDateTime dateCreated;
 
-    public User(UUID id, String username, String name, String passwordHash, String email) {
+    public User(UUID id, String username, String name, String passwordHash, String email, LocalDateTime dateCreated) {
         validate(id, username, passwordHash, email);
         this.id = id;
         this.username = username;
         this.passwordHash = passwordHash;
         this.name = name;
         this.email = email;
+        this.dateCreated = dateCreated;
     }
 
     public User(UUID id, String username) {
@@ -30,7 +30,8 @@ public class User {
 
     public static User create(String username, String passwordHash, String name, String email) {
         final UUID id = UUID.randomUUID();
-        return new User(id, username, name, passwordHash, email);
+        final LocalDateTime createDate = LocalDateTime.now();
+        return new User(id, username, name, passwordHash, email, createDate);
     }
 
     private void validate(UUID id, String username, String passwordHash, String email) {
@@ -64,6 +65,10 @@ public class User {
 
     public String getEmail() {
         return email;
+    }
+
+    public LocalDateTime getDateCreated() {
+        return dateCreated;
     }
 
     public void changePassword(String newPasswordHash) {

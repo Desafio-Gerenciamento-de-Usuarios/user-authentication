@@ -88,6 +88,7 @@ public class RegisterUserUseCase extends UseCase<RegisterInput, RegisterOutput> 
                 user.getEmail(),
                 user.getName(),
                 input.phone(),
+                user.getDateCreated().toString(),
                 addresses.stream()
                         .map(UserCreatedMessage.Address::from)
                         .toList()

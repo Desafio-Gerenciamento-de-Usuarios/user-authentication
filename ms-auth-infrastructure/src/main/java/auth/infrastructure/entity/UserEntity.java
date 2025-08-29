@@ -8,19 +8,21 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
 @Getter
 @Setter
-@Table(name = "USUARIO")
+@Table(name = "USUARIOS")
 public class UserEntity {
 
     @Id
-    @Column(name = "ID_USER")
+    @Column(name = "ID_USUARIO")
     private UUID id;
 
-    @Column(name = "USER_NAME", unique = true, nullable = false)
+    @Column(name = "USUARIO_LOGIN", unique = true, nullable = false)
     private String username;
 
     @Column(name = "NOME_USUARIO", nullable = false)
@@ -32,6 +34,9 @@ public class UserEntity {
     @Column(name = "EMAIL", unique = true, nullable = false)
     private String email;
 
+    @Column(name = "DT_CRIACAO", nullable = false)
+    private LocalDateTime dateCreated;
+
     public UserEntity() {
     }
 
@@ -42,6 +47,7 @@ public class UserEntity {
         entity.setPasswordHash(user.getPasswordHash());
         entity.setName(user.getName());
         entity.setEmail(user.getEmail());
+        entity.setDateCreated(user.getDateCreated());
         return entity;
     }
 
@@ -51,7 +57,8 @@ public class UserEntity {
                 this.getUsername(),
                 this.getName(),
                 this.getPasswordHash(),
-                this.getEmail()
+                this.getEmail(),
+                this.getDateCreated()
         );
     }
 }
