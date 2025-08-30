@@ -39,5 +39,8 @@ public class UserGatewayImpl implements UserGateway {
                 .map(UserEntity::toDomain);
     }
 
-
+    @Override
+    public boolean existByDocument(String document) {
+        return jpaUserRepository.existsByDocument(document);
+    }
 }

@@ -8,7 +8,6 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -22,11 +21,11 @@ public class UserEntity {
     @Column(name = "ID_USUARIO")
     private UUID id;
 
-    @Column(name = "USUARIO_LOGIN", unique = true, nullable = false)
+    @Column(name = "LOGIN", unique = true, nullable = false)
     private String username;
 
-    @Column(name = "NOME_USUARIO", nullable = false)
-    private String name;
+    @Column(name = "DOCUMENTO", nullable = false)
+    private String document;
 
     @Column(name = "SENHA", nullable = false)
     private String passwordHash;
@@ -45,7 +44,7 @@ public class UserEntity {
         entity.setId(user.getId());
         entity.setUsername(user.getUsername());
         entity.setPasswordHash(user.getPasswordHash());
-        entity.setName(user.getName());
+        entity.setDocument(user.getName());
         entity.setEmail(user.getEmail());
         entity.setDateCreated(user.getDateCreated());
         return entity;
@@ -55,7 +54,7 @@ public class UserEntity {
         return new User(
                 this.getId(),
                 this.getUsername(),
-                this.getName(),
+                this.getDocument(),
                 this.getPasswordHash(),
                 this.getEmail(),
                 this.getDateCreated()

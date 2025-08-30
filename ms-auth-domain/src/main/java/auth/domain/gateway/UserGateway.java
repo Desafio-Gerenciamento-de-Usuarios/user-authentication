@@ -12,4 +12,6 @@ public interface UserGateway {
     User save(User user);
 
     Optional<User> findByUser(String username);
+
+    boolean existByDocument(String document);
 }

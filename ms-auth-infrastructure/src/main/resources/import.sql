@@ -33,13 +33,12 @@ ALTER TABLE management.enderecos OWNER TO "user";
 -- Schema: auth (Autenticação)
 CREATE TABLE auth.usuarios
 (
-    id_usuario    UUID PRIMARY KEY,
-    email         VARCHAR(255) NOT NULL UNIQUE,
-    nome_usuario  VARCHAR(255) NOT NULL,
-    senha         VARCHAR(255) NOT NULL,
-    usuario_login VARCHAR(255) NOT NULL UNIQUE,
-    dt_criacao    TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    id_usuario UUID PRIMARY KEY,
+    email      VARCHAR(255) NOT NULL UNIQUE,
+    documento  VARCHAR(50)  NOT NULL UNIQUE,
+    senha      VARCHAR(255) NOT NULL,
+    login      VARCHAR(255) NOT NULL UNIQUE,
+    dt_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 ALTER TABLE auth.usuarios OWNER TO "user";
--- Índices para otimização de consultas

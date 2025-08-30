@@ -1,6 +1,5 @@
 package auth.infrastructure.gateway.repository;
 
-import auth.domain.model.User;
 import auth.infrastructure.entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -16,4 +15,6 @@ public interface JpaUserRepository extends JpaRepository<UserEntity, UUID> {
     boolean existsByEmail(String email);
 
     Optional<UserEntity> findByUsername(String username);
+
+    boolean existsByDocument(String document);
 }

@@ -33,6 +33,7 @@ public class RegisterUserUseCase extends UseCase<RegisterInput, RegisterOutput> 
         validate(input);
         verifyIfUserExists(input.username());
         verifyIfEmailExists(input.email());
+        verifyIfDocumentExists(input.document());
 
         final String passwordEncoded = encoder(input.password());
 
@@ -71,13 +72,19 @@ public class RegisterUserUseCase extends UseCase<RegisterInput, RegisterOutput> 
 
     private void verifyIfUserExists(String username) {
         if (userGateway.existsByUsername(username)) {
-            throw new ConflictException("Username already exists");
+            throw new ConflictException("Esse Usuário já está sendo utilizado");
         }
     }
 
     private void verifyIfEmailExists(String email) {
         if (userGateway.existsByEmail(email)) {
-            throw new ConflictException("Email already exists");
+            throw new ConflictException("Email Já cadastrado");
+        }
+    }
+
+    private void verifyIfDocumentExists(String document) {
+        if (userGateway.existByDocument(document)) {
+            throw new ConflictException("Documento Já cadastrado");
         }
     }
 
