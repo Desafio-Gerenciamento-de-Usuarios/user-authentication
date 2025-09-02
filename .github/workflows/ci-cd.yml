@@ -78,7 +78,7 @@ jobs:
 
   deploy-a:
     name: Deploy instance-a
-    runs-on: [ self-hosted, instace-a ]
+    runs-on: ubuntu-latest
     needs: push
 
     steps:
@@ -116,7 +116,7 @@ jobs:
 
   deploy-b:
     name: Deploy instance-b
-    runs-on: [ self-hosted, instace-b ]
+    runs-on: ubuntu-latest
     needs: push
 
     steps:
