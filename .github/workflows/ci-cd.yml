@@ -1,0 +1,153 @@
+name: CI/CD
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Cache Maven dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2
+          key: maven-${{ runner.os }}-${{ hashFiles('**/pom.xml') }}
+          restore-keys: maven-${{ runner.os }}-
+
+      - name: Compile Java Application
+        run: mvn clean compile
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Cache Maven dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2
+          key: maven-${{ runner.os }}-${{ hashFiles('**/pom.xml') }}
+          restore-keys: maven-${{ runner.os }}-
+
+      - name: Run Tests
+        run: mvn test
+
+  push:
+    name: Build and Push Docker Image
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build Docker Image
+        run: docker build -t jonathancarvalho039/user-authentication:latest .
+
+      - name: Push Docker Image
+        run: docker push jonathancarvalho039/user-authentication:latest
+
+  deploy-a:
+    name: Deploy instance-a
+    runs-on: [ self-hosted, instace-a ]
+    needs: push
+
+    steps:
+      - name: Update packages
+        run: |
+          sudo apt-get update -y
+
+      - name: Install Docker
+        run: |
+          if ! command -v docker &> /dev/null
+          then
+            curl -fsSL https://get.docker.com | sh
+          else
+            echo "Docker já instalado"
+          fi
+
+      - name: Install Docker Compose
+        run: |
+          if ! command -v docker-compose &> /dev/null
+          then
+            sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+            sudo chmod +x /usr/local/bin/docker-compose
+          else
+            echo "Docker Compose já instalado"
+          fi
+
+      - name: Pull latest image and restart container
+        run: |
+          sudo docker stop back-end || true
+          sudo docker rm back-end || true
+          sudo docker rmi jonathancarvalho039/user-authentication || true
+          sudo docker pull jonathancarvalho039/user-authentication
+          sudo docker run --name back-end -d -p 8080:8080 \
+            jonathancarvalho039/user-authentication
+
+  deploy-b:
+    name: Deploy instance-b
+    runs-on: [ self-hosted, instace-b ]
+    needs: push
+
+    steps:
+      - name: Update packages
+        run: |
+          sudo apt-get update -y
+
+      - name: Install Docker
+        run: |
+          if ! command -v docker &> /dev/null
+          then
+            curl -fsSL https://get.docker.com | sh
+          else
+            echo "Docker já instalado"
+          fi
+
+      - name: Install Docker Compose
+        run: |
+          if ! command -v docker-compose &> /dev/null
+          then
+            sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+            sudo chmod +x /usr/local/bin/docker-compose
+          else
+            echo "Docker Compose já instalado"
+          fi
+
+      - name: Pull latest image and restart container
+        run: |
+          sudo docker stop back-end || true
+          sudo docker rm back-end || true
+          sudo docker rmi jonathancarvalho039/user-authentication || true
+          sudo docker pull jonathancarvalho039/user-authentication
+          sudo docker run --name back-end -d -p 8080:8080 \
+            jonathancarvalho039/user-authentication
