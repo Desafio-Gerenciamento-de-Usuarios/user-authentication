@@ -2,28 +2,18 @@
 FROM maven:3.9-eclipse-temurin-17 AS build
 WORKDIR /app
 
-# Copia o arquivo pom.xml e baixa dependências
+# Copia pom.xml e os poms dos módulos
 COPY pom.xml .
-RUN mvn dependency:resolve
+COPY ms-auth-application/pom.xml ms-auth-application/
+COPY ms-auth-domain/pom.xml ms-auth-domain/
+COPY ms-auth-infrastructure/pom.xml ms-auth-infrastructure/
+COPY ms-auth-web/pom.xml ms-auth-web/
 
-# Copia o código-fonte
-COPY src ./src
+# Baixa dependências sem copiar código ainda (cache)
+RUN mvn dependency:go-offline
 
-# Compila a aplicação sem rodar testes
+# Agora copia todo o código
+COPY . .
+
+# Compila (gera jar dentro do módulo web geralmente)
 RUN mvn clean package -DskipTests
-
-# Runtime stage
-FROM openjdk:17-jdk-slim
-WORKDIR /app
-
-# Copia o JAR gerado do estágio de build (genérico)
-COPY --from=build /app/target/*.jar app.jar
-
-# Configurações do Spring Boot
-ENV SPRING_PROFILES_ACTIVE=prod
-
-# Expõe a porta
-EXPOSE 8080
-
-# Define o ponto de entrada
-ENTRYPOINT ["java", "-jar", "app.jar"]
