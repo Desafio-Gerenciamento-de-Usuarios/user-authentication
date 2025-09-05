@@ -8,7 +8,7 @@ import java.util.UUID;
 @Builder
 public record AuthOutput(
         UUID userId,
-        String name,
+        String username,
         Token token
 ) {
 }

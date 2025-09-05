@@ -24,14 +24,14 @@ public class UserEntity {
     @Column(name = "LOGIN", unique = true, nullable = false)
     private String username;
 
-    @Column(name = "DOCUMENTO", nullable = false)
-    private String document;
-
     @Column(name = "SENHA", nullable = false)
     private String passwordHash;
 
     @Column(name = "EMAIL", unique = true, nullable = false)
     private String email;
+
+    @Column(name = "DOCUMENTO", nullable = false)
+    private String document;
 
     @Column(name = "DT_CRIACAO", nullable = false)
     private LocalDateTime dateCreated;
@@ -44,7 +44,7 @@ public class UserEntity {
         entity.setId(user.getId());
         entity.setUsername(user.getUsername());
         entity.setPasswordHash(user.getPasswordHash());
-        entity.setDocument(user.getName());
+        entity.setDocument(user.getDocument());
         entity.setEmail(user.getEmail());
         entity.setDateCreated(user.getDateCreated());
         return entity;
@@ -54,9 +54,9 @@ public class UserEntity {
         return new User(
                 this.getId(),
                 this.getUsername(),
-                this.getDocument(),
                 this.getPasswordHash(),
                 this.getEmail(),
+                this.getDocument(),
                 this.getDateCreated()
         );
     }

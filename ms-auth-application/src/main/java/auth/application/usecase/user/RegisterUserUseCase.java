@@ -51,8 +51,8 @@ public class RegisterUserUseCase extends UseCase<RegisterInput, RegisterOutput> 
         final User domain = User.create(
                 input.username(),
                 passwordEncoded,
-                input.name(),
-                input.email()
+                input.email(),
+                input.document()
         );
 
         final User user = userGateway.save(domain);
@@ -62,7 +62,7 @@ public class RegisterUserUseCase extends UseCase<RegisterInput, RegisterOutput> 
         return new RegisterOutput(
                 user.getId(),
                 user.getUsername(),
-                user.getName()
+                user.getEmail()
         );
     }
 
@@ -93,7 +93,7 @@ public class RegisterUserUseCase extends UseCase<RegisterInput, RegisterOutput> 
                 user.getId().toString(),
                 input.document(),
                 user.getEmail(),
-                user.getName(),
+                input.name(),
                 input.phone(),
                 user.getDateCreated().toString(),
                 addresses.stream()

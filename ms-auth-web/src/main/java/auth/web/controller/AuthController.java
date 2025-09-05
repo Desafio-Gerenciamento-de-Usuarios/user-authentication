@@ -43,7 +43,7 @@ public class AuthController {
 
         final AuthOutput output = loginUserUseCase.execute(input);
 
-        final LoginResponse response = LoginResponse.of(output.userId(), output.name());
+        final LoginResponse response = LoginResponse.of(output.userId(), output.username());
 
         return ResponseEntity
                 .ok()
@@ -83,7 +83,7 @@ public class AuthController {
 
         final RegisterResponse response = RegisterResponse.of(
                 output.id(),
-                output.name(),
+                output.username(),
                 output.email()
         );
 

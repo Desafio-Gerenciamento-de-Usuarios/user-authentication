@@ -1,6 +1,10 @@
+DROP SCHEMA IF EXISTS management CASCADE;
+DROP SCHEMA IF EXISTS auth CASCADE;
+
 -- Cria os schemas
-CREATE SCHEMA IF NOT EXISTS management AUTHORIZATION "user";
-CREATE SCHEMA IF NOT EXISTS auth AUTHORIZATION "user";
+CREATE SCHEMA management AUTHORIZATION "user";
+CREATE SCHEMA auth AUTHORIZATION "user";
+
 
 -- Schema: management (Usuário + Endereço)
 CREATE TABLE management.usuarios

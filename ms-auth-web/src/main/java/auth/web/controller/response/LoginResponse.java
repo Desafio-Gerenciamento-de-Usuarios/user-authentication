@@ -4,9 +4,9 @@ import java.util.UUID;
 
 public record LoginResponse(
         UUID idUser,
-        String name
+        String username
 ) {
-    public static LoginResponse of(UUID uuid, String name) {
-        return new LoginResponse(uuid, name);
+    public static LoginResponse of(UUID uuid, String username) {
+        return new LoginResponse(uuid, username);
     }
 }

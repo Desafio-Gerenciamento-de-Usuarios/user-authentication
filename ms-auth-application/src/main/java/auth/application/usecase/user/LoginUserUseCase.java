@@ -35,7 +35,7 @@ public class LoginUserUseCase extends UseCase<LoginInput, AuthOutput> {
 
         return AuthOutput.builder()
                 .userId(user.getId())
-                .name(user.getName())
+                .username(user.getUsername())
                 .token(token)
                 .build();
     }

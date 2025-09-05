@@ -11,15 +11,27 @@ public class User {
     private String name;
     private String email;
     private String passwordHash;
+    private String document;
     private LocalDateTime dateCreated;
 
-    public User(UUID id, String username, String name, String passwordHash, String email, LocalDateTime dateCreated) {
+    public User(UUID id, String username, String name, String passwordHash, String email, String document, LocalDateTime dateCreated) {
         validate(id, username, passwordHash, email);
         this.id = id;
         this.username = username;
         this.passwordHash = passwordHash;
         this.name = name;
         this.email = email;
+        this.document = document;
+        this.dateCreated = dateCreated;
+    }
+
+    public User(UUID id, String username, String passwordHash, String email, String document, LocalDateTime dateCreated) {
+        validate(id, username, passwordHash, email);
+        this.id = id;
+        this.username = username;
+        this.passwordHash = passwordHash;
+        this.email = email;
+        this.document = document;
         this.dateCreated = dateCreated;
     }
 
@@ -28,10 +40,10 @@ public class User {
         this.username = username;
     }
 
-    public static User create(String username, String passwordHash, String name, String email) {
+    public static User create(String username, String passwordHash, String email, String document) {
         final UUID id = UUID.randomUUID();
         final LocalDateTime createDate = LocalDateTime.now();
-        return new User(id, username, name, passwordHash, email, createDate);
+        return new User(id, username, passwordHash, email, document, createDate);
     }
 
     private void validate(UUID id, String username, String passwordHash, String email) {
@@ -69,6 +81,10 @@ public class User {
 
     public LocalDateTime getDateCreated() {
         return dateCreated;
+    }
+
+    public String getDocument() {
+        return document;
     }
 
     public void changePassword(String newPasswordHash) {
