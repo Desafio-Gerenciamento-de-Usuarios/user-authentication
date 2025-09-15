@@ -4,7 +4,7 @@ spring:
   application:
     name: ms-auth
   datasource:
-    url: jdbc:postgresql://localhost:5432/user_db?currentSchema=auth
+    url: jdbc:postgresql://${HOST_DB:localhost}:5432/user_db?currentSchema=auth
     username: user
     password: pass
     driver-class-name: org.postgresql.Driver
@@ -14,7 +14,7 @@ spring:
   rabbitmq:
     publisher-returns: true
     publisher-confirm-type: correlated
-    host: localhost
+    host: ${HOST_RABBIT:localhost}
     port: 5672
     username: guest
     password: guest
@@ -35,5 +35,5 @@ server:
   port: 8080
 
 jwt:
-  private-key-path: ./keys/private_key.pem
-  public-key-path: ./keys/public_key.pem
+  private-key-path: ${JWT_KEYS_PATH:./keys/private_key.pem}/private_key.pem
+  public-key-path: ${JWT_KEYS_PATH:./keys/public_key.pem}/public_key.pem
