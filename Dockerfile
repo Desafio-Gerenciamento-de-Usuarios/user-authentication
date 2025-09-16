@@ -26,5 +26,7 @@ WORKDIR /app
 # Copia o jar do módulo web (ajuste o nome se necessário)
 COPY --from=build /app/ms-auth-infrastructure/target/*.jar app.jar
 
+EXPOSE 8080
+
 # Executa o jar
 ENTRYPOINT ["java", "-jar", "app.jar"]
