@@ -24,7 +24,7 @@ FROM eclipse-temurin:17-jdk
 WORKDIR /app
 
 # Copia o jar do módulo web (ajuste o nome se necessário)
-COPY --from=build /app/ms-auth-web/target/*.jar app.jar
+COPY --from=build /app/ms-auth-infrastructure/target/*.jar app.jar
 
 # Executa o jar
 ENTRYPOINT ["java", "-jar", "app.jar"]
